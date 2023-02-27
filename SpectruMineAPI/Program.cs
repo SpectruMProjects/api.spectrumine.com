@@ -31,6 +31,7 @@ namespace SpectruMineAPI
             builder.Services.Configure<DBSettings>(builder.Configuration.GetSection("MongoSettings"));
             builder.Services.AddSingleton<UserCRUD>();
             builder.Services.AddSingleton<AuthService>();
+            AuthOptions.KEY = builder.Configuration.GetValue<string>("JWTSecret")!;
             var app = builder.Build();
             app.UseAuthentication();
             app.UseAuthorization();

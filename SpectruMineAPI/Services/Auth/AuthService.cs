@@ -148,7 +148,7 @@ namespace SpectruMineAPI.Services.Auth
     {
         public const string ISSUER = "spectrum"; // издатель токена
         public const string AUDIENCE = "client"; // потребитель токена
-        const string KEY = "mysupersecret_secretkey!123";   // ключ для шифрации
+        public static string KEY = null!;   // ключ для шифрации
         public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
     }
