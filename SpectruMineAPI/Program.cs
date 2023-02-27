@@ -19,21 +19,21 @@ namespace SpectruMineAPI
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = false,
+                    ValidateIssuer = true,
                     ValidIssuer = AuthOptions.ISSUER,
-                    ValidateAudience = false,
+                    ValidateAudience = true,
                     ValidAudience = AuthOptions.AUDIENCE,
-                    ValidateLifetime = false,
+                    ValidateLifetime = true,
                     IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                    ValidateIssuerSigningKey = false,
+                    ValidateIssuerSigningKey = true,
                 };
             });
             builder.Services.Configure<DBSettings>(builder.Configuration.GetSection("MongoSettings"));
             builder.Services.AddSingleton<UserCRUD>();
             builder.Services.AddSingleton<AuthService>();
             var app = builder.Build();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
