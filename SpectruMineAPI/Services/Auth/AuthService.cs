@@ -12,20 +12,23 @@ namespace SpectruMineAPI.Services.Auth
     public class AuthService
     {
         private UserCRUD Users;
-        public AuthService(UserCRUD users) => Users = users;
+        public AuthService(UserCRUD users)
+        {
+            Users = users;
+        }
         public async Task<Errors> CreateAccount(string Username, string Password, string Email)
         {
             var regexUsername = new Regex(@"^[a-zA-Z0-9_]{3,16}$");
             var regexPassword = new Regex(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$");
             var regexMail = new Regex("^[a-zA-Z0-9.!#$%&’*+=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
             //Секция проверки данных
-            if(!regexUsername.IsMatch(Username) || !regexPassword.IsMatch(Password) || !regexMail.IsMatch(Email))
+            if (!regexUsername.IsMatch(Username) || !regexPassword.IsMatch(Password) || !regexMail.IsMatch(Email))
             {
                 return Errors.RegexNotMatch;
             }
             //Секция проверки существования другого аккаунта
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
-            if(user != null)
+            if (user != null)
             {
                 return Errors.Conflict;
             }
@@ -41,14 +44,9 @@ namespace SpectruMineAPI.Services.Auth
         public async Task<Errors> CheckUser(string Username, string Password)
         {
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
-            if (user == null)
-            {
-                return Errors.UserNotFound;
-            }
-            if(user.Password != Crypto.CalculateSHA256(Password))
-            {
-                return Errors.InvalidPassword;
-            }
+            if (user == null) return Errors.UserNotFound;
+            if (user.Password != Crypto.CalculateSHA256(Password)) return Errors.InvalidPassword;
+            if (!user.verified) return Errors.AccountDisabled;
             return Errors.Success;
         }
         public async Task<Errors> CheckToken(string refreshToken)
@@ -57,7 +55,7 @@ namespace SpectruMineAPI.Services.Auth
             var user = userList.FirstOrDefault(x => x.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken) != null);
             if (user == null) return Errors.UserNotFound;
             var Token = user.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken);
-            if(Token!.ExpireAt < DateTime.UtcNow)
+            if (Token!.ExpireAt < DateTime.UtcNow)
             {
                 user.RefreshTokens.Remove(Token);
                 await Users.UpdateAsync(user.Id, user);
@@ -124,7 +122,7 @@ namespace SpectruMineAPI.Services.Auth
         {
             return await Users.GetAsync();
         }
-        public enum Errors { RegexNotMatch, Success, Conflict, UserNotFound, InvalidPassword, TokenExpire }
+        public enum Errors { RegexNotMatch, Success, Conflict, UserNotFound, InvalidPassword, TokenExpire, AccountDisabled }
         public record Tokens(string AccessToken, RefreshToken RefreshToken);
     }
     static class Crypto

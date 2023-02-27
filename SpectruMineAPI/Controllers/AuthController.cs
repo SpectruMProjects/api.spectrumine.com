@@ -44,6 +44,8 @@ namespace SpectruMineAPI.Controllers
                     return Unauthorized(new Models.Error(status.ToString(), "WrongPassword"));
                 case AuthService.Errors.UserNotFound:
                     return Unauthorized(new Models.Error(status.ToString(), "UserNotExist"));
+                case AuthService.Errors.AccountDisabled:
+                    return Unauthorized(new Models.Error(status.ToString(), "CheckMail"));
             }
             var auth = await authService.GenerateTokens(query.Username);
             return new AuthResponse(auth.AccessToken, auth.RefreshToken.Token);
