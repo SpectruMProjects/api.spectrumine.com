@@ -144,12 +144,4 @@ namespace SpectruMineAPI.Services.Auth
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
     }
-    public class AuthOptions
-    {
-        public const string ISSUER = "spectrum"; // издатель токена
-        public const string AUDIENCE = "client"; // потребитель токена
-        public static string KEY = null!;   // ключ для шифрации
-        public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
-    }
 }
