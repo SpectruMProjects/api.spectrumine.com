@@ -2,7 +2,7 @@
 
 namespace SpectruMineAPI.Controllers
 {
-    namespace DTO
+    namespace AuthDTO
     {
         public record UsersResponse(List<User> Users);
         public record RegisterQuery(string Username, string Password, string Email);

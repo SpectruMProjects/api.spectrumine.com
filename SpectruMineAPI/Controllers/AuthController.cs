@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SpectruMineAPI.Controllers.DTO;
+using SpectruMineAPI.Controllers.AuthDTO;
 using SpectruMineAPI.Services.Auth;
 
 namespace SpectruMineAPI.Controllers
