@@ -1,5 +1,4 @@
-﻿using SpectruMineAPI.Services.Auth;
-using SpectruMineAPI.Services.Database;
+﻿using SpectruMineAPI.Services.Database;
 
 namespace SpectruMineAPI.Services.Mail
 {
@@ -11,7 +10,7 @@ namespace SpectruMineAPI.Services.Mail
         {
             var users = await Users.GetAsync();
             var user = users.FirstOrDefault(x => x.MailCodes.FirstOrDefault(y => y.Code == code && !y.isRestore) != null);
-            if(user != null)
+            if (user != null)
             {
                 var findcode = user.MailCodes.FirstOrDefault(y => y.Code == code && !y.isRestore);
                 user.MailCodes.Remove(findcode!);

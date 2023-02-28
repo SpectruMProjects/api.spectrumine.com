@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SpectruMineAPI.Controllers.AuthDTO;
 using SpectruMineAPI.Services.Auth;
@@ -92,6 +91,10 @@ namespace SpectruMineAPI.Controllers
             var response = await authService.UpdateTokens(query.RefreshToken);
             return new UpdateResponse(response.AccessToken, response.RefreshToken.Token);
         }
+
+        /// <summary>
+        /// Logout current token method
+        /// </summary>
         [HttpPost("Logout")]
         public async Task<ActionResult> Logout(UpdateQuery query)
         {

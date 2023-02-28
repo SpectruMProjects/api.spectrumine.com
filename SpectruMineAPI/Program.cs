@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SpectruMineAPI.Services.Auth;
-using SpectruMineAPI.Services.Mail;
 using SpectruMineAPI.Services.Database;
+using SpectruMineAPI.Services.Mail;
 
 namespace SpectruMineAPI
 {

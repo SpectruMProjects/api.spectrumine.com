@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SpectruMineAPI.Models;
-using SpectruMineAPI.Services.Auth;
 using SpectruMineAPI.Services.Mail;
 
 namespace SpectruMineAPI.Controllers
