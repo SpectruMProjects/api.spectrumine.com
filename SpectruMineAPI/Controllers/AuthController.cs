@@ -12,7 +12,7 @@ namespace SpectruMineAPI.Controllers
     {
         private AuthService authService;
         public AuthController(AuthService authService) => this.authService = authService;
-        [HttpGet("Users")] 
+        [HttpGet("Users")]
         public async Task<ActionResult<UsersResponse>> GetUsers()
         {
             List<Models.User> users = await authService.GetUsers();
@@ -22,7 +22,7 @@ namespace SpectruMineAPI.Controllers
         public async Task<IActionResult> CreateUser(RegisterQuery query)
         {
             var status = await authService.CreateAccount(query.Username, query.Password, query.Email);
-            if(status != AuthService.Errors.Success)
+            if (status != AuthService.Errors.Success)
             {
                 switch (status)
                 {
@@ -65,7 +65,7 @@ namespace SpectruMineAPI.Controllers
         public async Task<ActionResult<UpdateResponse>> UpdateToken(UpdateQuery query)
         {
             var status = await authService.CheckToken(query.RefreshToken);
-            switch(status)
+            switch (status)
             {
                 case AuthService.Errors.UserNotFound:
                     return Unauthorized(new Models.Error(status.ToString(), "TokenNotExist"));
@@ -104,6 +104,19 @@ namespace SpectruMineAPI.Controllers
                     return Unauthorized(new Models.Error(status.ToString(), "TokenExipred"));
             }
             authService.RemoveToken(query.RefreshToken);
+            return Ok();
+        }
+        [HttpPost("ResetPassword")]
+        public async Task<ActionResult> ResetPass(ResetPassQuery query)
+        {
+            var status = await authService.UpdatePassword(query.Email, query.NewPassword);
+            switch (status)
+            {
+                case AuthService.Errors.UserNotFound:
+                    return NotFound(new Models.Error(status.ToString(), "IncorrectMail"));
+                case AuthService.Errors.RegexNotMatch:
+                    return BadRequest(new Models.Error(status.ToString(), "IncorrectData"));
+            }
             return Ok();
         }
     }

@@ -135,6 +135,25 @@ namespace SpectruMineAPI.Services.Auth
             user.RefreshTokens.Remove(user.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken)!);
             await Users.UpdateAsync(user.Id, user);
         }
+        public async Task<Errors> UpdatePassword(string email, string password)
+        {
+            var regexMail = new Regex("^[a-zA-Z0-9.!#$%&’*+=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
+            var regexPassword = new Regex(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$");
+            var user = await Users.GetAsync(x => x.Email == email);
+            if (user == null) return Errors.UserNotFound;
+            if (!regexPassword.IsMatch(password) || !regexMail.IsMatch(email)) return Errors.RegexNotMatch;
+            user.NewPassword = Crypto.CalculateSHA256(password);
+            var code = Crypto.CalculateMD5(DateTime.UtcNow.ToString());
+            user.MailCodes.Add(new()
+            {
+                Code = code,
+                ExpireAt = DateTime.UtcNow.AddMinutes(5),
+                isRestore = true
+            });
+            await Users.UpdateAsync(user.Id, user);
+            MailService.SendMessageRestore(email, code);
+            return Errors.Success;
+        }
         public async Task<List<User>> GetUsers()
         {
             return await Users.GetAsync();

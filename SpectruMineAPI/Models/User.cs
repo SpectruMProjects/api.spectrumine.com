@@ -10,7 +10,7 @@ public class User
     public string Username { get; set; } = null!;
     public string _username { get; set; } = null!;
     public string Password { get; set; } = null!;
-    public string? NewPassword { get; set; }
+    public string? NewPassword { get; set; } 
     public string Email { get; set; } = null!;
     public bool Verified { get; set; } = false;
     public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();

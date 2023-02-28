@@ -28,8 +28,14 @@ namespace SpectruMineAPI.Controllers
             return Ok();
         }
         [HttpGet("restore/{key}")]
-        public ActionResult Restore(string key)
+        public async Task<ActionResult> Restore(string key)
         {
+            var result = await MailService.ActivatePassword(key);
+            switch (result)
+            {
+                case MailService.Errors.UserNotFound: return BadRequest(new Error(result.ToString(), "CodeNotFound"));
+                case MailService.Errors.CodeExpire: return BadRequest(new Error(result.ToString(), "CodeExpired"));
+            }
             return Ok();
         }
     }

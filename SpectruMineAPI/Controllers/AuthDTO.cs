@@ -10,5 +10,6 @@ namespace SpectruMineAPI.Controllers
         public record AuthResponse(string AccessToken, string RefreshToken);
         public record UpdateQuery(string RefreshToken);
         public record UpdateResponse(string AccessToken, string RefreshToken);
+        public record ResetPassQuery(string Email, string NewPassword);
     }
 }
