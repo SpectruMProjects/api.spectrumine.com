@@ -32,7 +32,7 @@ namespace SpectruMineAPI.Services.Auth
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
             if (user != null)
             {
-                if (!user.verified)
+                if (!user.Verified)
                 {
                     await Users.RemoveAsync(user.Id);
                 }
@@ -63,7 +63,7 @@ namespace SpectruMineAPI.Services.Auth
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
             if (user == null) return Errors.UserNotFound;
             if (user.Password != Crypto.CalculateSHA256(Password)) return Errors.InvalidPassword;
-            if (!user.verified) return Errors.AccountDisabled;
+            if (!user.Verified) return Errors.AccountDisabled;
             return Errors.Success;
         }
         public async Task<Errors> CheckToken(string refreshToken)

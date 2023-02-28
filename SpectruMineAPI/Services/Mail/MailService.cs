@@ -20,7 +20,7 @@ namespace SpectruMineAPI.Services.Mail
                     await Users.UpdateAsync(user.Id, user);
                     return Errors.CodeExpire;
                 }
-                user.verified = true;
+                user.Verified = true;
                 await Users.UpdateAsync(user.Id, user);
                 return Errors.Success;
             }
