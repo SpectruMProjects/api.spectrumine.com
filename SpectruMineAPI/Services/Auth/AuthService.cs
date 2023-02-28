@@ -12,9 +12,11 @@ namespace SpectruMineAPI.Services.Auth
     public class AuthService
     {
         private UserCRUD Users;
-        public AuthService(UserCRUD users)
+        private Mail.MailSenderService MailService;
+        public AuthService(UserCRUD users, Mail.MailSenderService mailService)
         {
             Users = users;
+            MailService = mailService;
         }
         public async Task<Errors> CreateAccount(string Username, string Password, string Email)
         {
@@ -30,15 +32,30 @@ namespace SpectruMineAPI.Services.Auth
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
             if (user != null)
             {
-                return Errors.Conflict;
+                if (!user.verified)
+                {
+                    await Users.RemoveAsync(user.Id);
+                }
+                else return Errors.Conflict;
             }
+            var code = Crypto.CalculateMD5(DateTime.UtcNow.ToString());
+            //Создание аккаунта
             await Users.CreateAsync(new()
             {
                 Username = Username,
                 _username = Username.ToLower(),
                 Password = Crypto.CalculateSHA256(Password),
-                Email = Email
-            }); ;
+                Email = Email,
+                MailCodes = new() {
+                    new()
+                    {
+                        Code = code,
+                        ExpireAt = DateTime.UtcNow.AddMinutes(5)
+                    }
+                }
+            });
+            //Отправка на почту кода регистрации
+            MailService.SendMessageActivate(Email, code);
             return Errors.Success;
         }
         public async Task<Errors> CheckUser(string Username, string Password)
@@ -130,6 +147,10 @@ namespace SpectruMineAPI.Services.Auth
         public static string CalculateSHA256(string data)
         {
             return Convert.ToHexString(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(data))).ToLower();
+        }
+        public static string CalculateMD5(string data)
+        {
+            return Convert.ToHexString(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(data))).ToLower();
         }
         public static string GetAccessToken(string username)
         {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SpectruMineAPI.Services.Auth;
+using SpectruMineAPI.Services.Mail;
 using SpectruMineAPI.Services.Database;
 
 namespace SpectruMineAPI
@@ -29,9 +30,12 @@ namespace SpectruMineAPI
                 };
             });
             builder.Services.Configure<DBSettings>(builder.Configuration.GetSection("MongoSettings"));
-            builder.Services.AddSingleton<UserCRUD>();
-            builder.Services.AddSingleton<AuthService>();
+            builder.Services.Configure<MailData>(builder.Configuration.GetSection("SMTPData"));
             AuthOptions.KEY = builder.Configuration.GetValue<string>("JWTSecret")!;
+            builder.Services.AddSingleton<UserCRUD>();
+            builder.Services.AddSingleton<MailSenderService>();
+            builder.Services.AddSingleton<MailService>();
+            builder.Services.AddSingleton<AuthService>();
             var app = builder.Build();
             app.UseAuthentication();
             app.UseAuthorization();

@@ -12,5 +12,6 @@ public class User
     public string Password { get; set; } = null!;
     public string Email { get; set; } = null!;
     public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+    public List<MailCode> MailCodes { get; set; } = new List<MailCode>();
     public bool verified { get; set; } = false;
 }
