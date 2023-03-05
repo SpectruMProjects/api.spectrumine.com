@@ -154,6 +154,12 @@ namespace SpectruMineAPI.Services.Auth
             MailService.SendMessageRestore(email, code);
             return Errors.Success;
         }
+        public async Task<string?> GetMailByUsername(string username)
+        {
+            var user = await Users.GetAsync(x => x._username == username);//Предусматривается что тут username уже ToLower
+            if (user == null) return null;
+            return user.Email;
+        }
         public async Task<List<User>> GetUsers()
         {
             return await Users.GetAsync();
@@ -180,7 +186,6 @@ namespace SpectruMineAPI.Services.Auth
                     claims: claims,
                     expires: DateTime.UtcNow, //Действует 5 минут
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
     }

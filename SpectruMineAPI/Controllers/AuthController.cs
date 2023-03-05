@@ -122,5 +122,21 @@ namespace SpectruMineAPI.Controllers
             }
             return Ok();
         }
+        [Authorize]
+        [HttpPost("ResetPasswordAuth")]
+        public async Task<ActionResult> ResetPassAuth(ResetPassQueryAuth query)
+        {
+            var userMail = await authService.GetMailByUsername(User.Identity!.Name!);
+            if (userMail == null) return BadRequest(new Models.Error("Null", "Каким образом это вообще могло возникнуть? Ты долбаёб?"));
+            var status = await authService.UpdatePassword(userMail, query.NewPassword);
+            switch (status)
+            {
+                case AuthService.Errors.UserNotFound:
+                    return NotFound(new Models.Error(status.ToString(), "IncorrectMail"));
+                case AuthService.Errors.RegexNotMatch:
+                    return BadRequest(new Models.Error(status.ToString(), "IncorrectData"));
+            }
+            return Ok();
+        }
     }
 }
