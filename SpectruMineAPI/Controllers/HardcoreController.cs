@@ -27,5 +27,10 @@ namespace SpectruMineAPI.Controllers
             }
             return Ok();
         }
+        [HttpGet("stats/{username}")]
+        public async Task<ActionResult> GetStats(string username)
+        {
+            return Ok();
+        }
     }
 }

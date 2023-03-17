@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SpectruMineAPI.Services.Auth;
 using SpectruMineAPI.Services.Database;
+using SpectruMineAPI.Services.Hardcore;
 using SpectruMineAPI.Services.Mail;
 
 namespace SpectruMineAPI
@@ -36,9 +37,11 @@ namespace SpectruMineAPI
             builder.Services.AddSingleton<MailSenderService>();
             builder.Services.AddSingleton<MailService>();
             builder.Services.AddSingleton<AuthService>();
+            builder.Services.AddSingleton<HardcoreService>();
             var app = builder.Build();
             app.UseAuthentication();
             app.UseAuthorization();
+            AuthOptions.UseMail = app.Configuration.GetValue<bool>("UseMail");
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

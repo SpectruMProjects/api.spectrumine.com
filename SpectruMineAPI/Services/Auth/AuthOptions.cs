@@ -10,5 +10,6 @@ namespace SpectruMineAPI.Services.Auth
         public static string KEY = null!;   // ключ для шифрации
         public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
+        public static bool UseMail = true; //Активировать через почту?
     }
 }

@@ -40,22 +40,37 @@ namespace SpectruMineAPI.Services.Auth
             }
             var code = Crypto.CalculateMD5(DateTime.UtcNow.ToString());
             //Создание аккаунта
-            await Users.CreateAsync(new()
+            
+            if (AuthOptions.UseMail)
             {
-                Username = Username,
-                _username = Username.ToLower(),
-                Password = Crypto.CalculateSHA256(Password),
-                Email = Email,
-                MailCodes = new() {
+                await Users.CreateAsync(new()
+                {
+                    Username = Username,
+                    _username = Username.ToLower(),
+                    Password = Crypto.CalculateSHA256(Password),
+                    Email = Email,
+                    MailCodes = new() {
                     new()
                     {
                         Code = code,
                         ExpireAt = DateTime.UtcNow.AddMinutes(5)
                     }
                 }
-            });
-            //Отправка на почту кода регистрации
-            MailService.SendMessageActivate(Email, code);
+                });
+                //Отправка на почту кода регистрации
+                MailService.SendMessageActivate(Email, code);
+            }
+            else
+            {
+                await Users.CreateAsync(new()
+                {
+                    Username = Username,
+                    _username = Username.ToLower(),
+                    Password = Crypto.CalculateSHA256(Password),
+                    Email = Email,
+                    Verified = true
+                });
+            }
             return Errors.Success;
         }
         public async Task<Errors> CheckUser(string Username, string Password)
