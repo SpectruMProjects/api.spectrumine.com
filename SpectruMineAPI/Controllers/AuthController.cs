@@ -54,7 +54,7 @@ namespace SpectruMineAPI.Controllers
         [Authorize]
         public async Task<ActionResult<User>> GetUser()
         {
-            var result = await authService.GetUserByUsername(User.Identity!.Name!);
+            var result = await authService.GetUserById(User.Identity!.Name!);
             if (result == null) return Unauthorized(new Models.Error(AuthService.Errors.UserNotFound.ToString(), "UsernameChanged"));
             return result.MapToAuth();
         }

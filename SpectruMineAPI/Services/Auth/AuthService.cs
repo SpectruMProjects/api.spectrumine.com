@@ -19,9 +19,9 @@ namespace SpectruMineAPI.Services.Auth
             MailService = mailService;
         }
 
-        public async Task<User?> GetUserByUsername(string username)
+        public async Task<User?> GetUserById(string id)
         {
-            var user = await Users.GetAsync(x => x._username == username.ToLower());
+            var user = await Users.GetAsync(x => x.Id == id);
             return user;
         }
         public async Task<Errors> CreateAccount(string Username, string Password, string Email)
@@ -123,7 +123,7 @@ namespace SpectruMineAPI.Services.Auth
                 Token = Crypto.CalculateSHA256(DateTime.UtcNow.ToString()),
                 ExpireAt = DateTime.UtcNow.AddDays(30)
             };
-            var accessToken = Crypto.GetAccessToken(user._username);
+            var accessToken = Crypto.GetAccessToken(user.Id);
             user.RefreshTokens.Add(refreshToken);
             await Users.UpdateAsync(user.Id, user);
             return new(accessToken, refreshToken);
@@ -139,7 +139,7 @@ namespace SpectruMineAPI.Services.Auth
                 Token = Crypto.CalculateSHA256(DateTime.UtcNow.ToString()),
                 ExpireAt = DateTime.UtcNow.AddDays(30)
             };
-            var accessToken = Crypto.GetAccessToken(user._username);
+            var accessToken = Crypto.GetAccessToken(user.Id);
             user.RefreshTokens.Remove(user.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken)!);
             user.RefreshTokens.Add(newToken);
             await Users.UpdateAsync(user.Id, user);
@@ -157,7 +157,7 @@ namespace SpectruMineAPI.Services.Auth
                 Token = Crypto.CalculateSHA256(DateTime.UtcNow.ToString()),
                 ExpireAt = DateTime.UtcNow.AddDays(30)
             };
-            var accessToken = Crypto.GetAccessToken(user._username);
+            var accessToken = Crypto.GetAccessToken(user.Id);
             user.RefreshTokens.Remove(user.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken)!);
             user.RefreshTokens.Add(newToken);
             await Users.UpdateAsync(user.Id, user);
@@ -221,9 +221,9 @@ namespace SpectruMineAPI.Services.Auth
             return Convert.ToHexString(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(data))).ToLower();
         }
 
-        public static string GetAccessToken(string username)
+        public static string GetAccessToken(string id)
         {
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, id) };
             var jwt = new JwtSecurityToken(
                     issuer: AuthOptions.ISSUER,
                     audience: AuthOptions.AUDIENCE,
