@@ -70,6 +70,9 @@ namespace SpectruMineAPI.Services.Auth
           _username = Username.ToLower(),
           Password = Crypto.CalculateSHA256(Password),
           Email = Email,
+          MailCodes = new() {new(){
+            Code = code,
+            ExpireAt = DateTime.UtcNow.AddMinutes(5)}},
           Verified = false
         });
       }
