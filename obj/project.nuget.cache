@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "KJB8WRKP4LTbFc9J82b4+vZOYpY+75Mv0nzyxznMMvSgvPw/n4B+XLGq+KLfBv1MjMh63Ht4Qu2tHB8I+HWqsQ==",
+  "dgSpecHash": "dD7v/ajSh4Wqx+BmD83ZKf45IBruetQPz3eC+E4L0LTq/pNsLaocoVnhn16AoZPtGhQpeIgdSlTZ6ji9h9Cavw==",
   "success": true,
-  "projectFilePath": "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI\\SpectruMineAPI.csproj",
+  "projectFilePath": "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Lisoveliy\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\Lisoveliy\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",
