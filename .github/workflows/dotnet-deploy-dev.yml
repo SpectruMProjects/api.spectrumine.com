@@ -9,6 +9,6 @@ jobs:
       runs-on: self-hosted
       steps:
         - run: cd ~/dev/back/ && git fetch
-        - run: cd ~/dev/back/ && git pull origin ubuntu-release
+        - run: cd ~/dev/back/ && git pull origin release-ubuntu
         - run: sudo chmod 777 ~/dev/back/bin/Release/SpectruMineAPI
         - run: ~/dev/back/bin/Release/SpectruMineAPI
