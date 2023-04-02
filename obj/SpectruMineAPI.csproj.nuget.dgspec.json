@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI\\SpectruMineAPI.csproj": {}
+    "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI.csproj": {}
   },
   "projects": {
-    "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI\\SpectruMineAPI.csproj": {
+    "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI\\SpectruMineAPI.csproj",
+        "projectUniqueName": "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI.csproj",
         "projectName": "SpectruMineAPI",
-        "projectPath": "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI\\SpectruMineAPI.csproj",
+        "projectPath": "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI.csproj",
         "packagesPath": "C:\\Users\\Lisoveliy\\.nuget\\packages\\",
-        "outputPath": "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI\\obj\\",
+        "outputPath": "D:\\GitHub\\api.spectrumine.com\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Addons\\VSAddons\\NuGetPackages"
