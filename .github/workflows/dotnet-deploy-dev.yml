@@ -1,0 +1,14 @@
+name: .NET Deploy on server
+
+on:
+  push:
+    branches: [ "release-ubuntu" ]
+
+jobs:
+  deploy:
+      runs-on: self-hosted
+      steps:
+        - run: cd ~/dev/back/ && git fetch
+        - run: cd ~/dev/back/ && git pull origin ubuntu-release
+        - run: sudo chmod 777 ~/dev/back/bin/Release/SpectruMineAPI
+        - run: ~/dev/back/bin/Release/SpectruMineAPI
