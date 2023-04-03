@@ -1,4 +1,4 @@
-name: .NET Core Deploy Release
+name: Deploy Dev Build
 
 on:
   push:
