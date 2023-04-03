@@ -1,0 +1,12 @@
+[Unit]
+    Disctiption=SpectruMAPI Service
+[Service]
+    ExecStart=/home/master/dev/back/Publish/SpectruMineAPI
+    Type=idle
+    KillMode=process
+
+    SyslogIdentifier=smart-test
+    SyslogFacility=daemon
+    Restart=on-failure
+[Install]
+    WantedBy=multiuser.target
