@@ -1,0 +1,15 @@
+name: .NET Core Deploy Release
+
+on:
+  push:
+    branches: [ "ubuntu-dev-release" ]
+  pull_request:
+    branches: [ "ubuntu-dev-release" ]
+
+jobs:
+  Deploy-Dev-Build:
+    runs-on: self-hosted
+    steps:
+      - run: systemctl --user stop api.service
+      - run: cd ~/dev/back/ && git pull origin --force ubuntu-dev-release
+      - run: systemctl --user start api.service
