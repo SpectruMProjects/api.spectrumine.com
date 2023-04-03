@@ -5,7 +5,7 @@ import asyncio
 pattern = "alpha"
 filename = "SpectruMineAPI.csproj"
 file = xml.etree.ElementTree.parse(filename)
-publishdir = "./bin/Publish"
+publishdir = "./Publish"
 
 
 version = file.getroot().find("PropertyGroup").find("Version")
