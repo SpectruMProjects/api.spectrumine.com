@@ -10,13 +10,13 @@ publishdir = "./Publish"
 
 version = file.getroot().find("PropertyGroup").find("Version")
 print("Generating version")
-print("Pattern: maj.min.[DAY].[MOUTH][LASTHOUR][MINUTES]")
+print("Pattern: maj.min.[MOUTH].[DAY][LASTHOUR][MINUTES]")
 print("0.1* alpha, 0.2* beta, 1.* release")
 print("selected pattern: " + pattern)
 
 MAJ: int
 MIN: int
-DAYBUILD: int
+MOUTHBUILD: int
 if pattern == "alpha":
     MAJ = 0
     MIN = 1
@@ -28,9 +28,9 @@ if pattern == "beta":
 if pattern == "release":
     MAJ = 1
     MIN = 0
-DAYBUILD = datetime.datetime.now().day
-LATESTINFO = str(datetime.datetime.now().month) + str(datetime.datetime.now().hour)[1:] + str(datetime.datetime.now().minute)
-ALLVERSION = str(MAJ) + "." + str(MIN) + "." + str(DAYBUILD) + "." + LATESTINFO
+MOUTHBUILD = datetime.datetime.now().month
+LATESTINFO =  str(datetime.datetime.now().day)+ str(datetime.datetime.now().hour)[1:] + str(datetime.datetime.now().minute)
+ALLVERSION = str(MAJ) + "." + str(MIN) + "." + str(MOUTHBUILD) + "." + LATESTINFO
 print(ALLVERSION)
 version.text = ALLVERSION
 file.write(filename)
