@@ -5,6 +5,9 @@ import asyncio
 pattern = "alpha"
 filename = "SpectruMineAPI.csproj"
 file = xml.etree.ElementTree.parse(filename)
+publishdir = "./bin/Publish"
+
+
 version = file.getroot().find("PropertyGroup").find("Version")
 print("Generating version")
 print("Pattern: maj.min.[DAY].[MOUTH][LASTHOUR][MINUTES]")
@@ -33,7 +36,7 @@ version.text = ALLVERSION
 file.write(filename)
 print("[DONE]")
 async def Proc():
-    print("Publishing at /bin/Publish... Please wait...")
+    print("Publishing at " + publishdir + "... Please wait...")
     time1 = time.time()
     proc = await asyncio.create_subprocess_shell(
     "dotnet build --configuration Release",
@@ -46,12 +49,12 @@ async def Proc():
     if stderr:
         print(f'\n{stderr.decode()}')
     elapsed = str(round(time.time() - time1, 2)) 
-    if proc.returncode is not 0:
+    if proc.returncode != 0:
         print("Build failed at " + elapsed + "s. returning...")
         return
     print("Build Successful at " + elapsed + "s. Publishing...")
     proc1 = await asyncio.create_subprocess_shell(
-    "dotnet publish -c Release -r ubuntu.22.04-x64 --output ./bin/Publish",
+    "dotnet publish -c Release -r ubuntu.22.04-x64 --output " + publishdir,
     stdout=asyncio.subprocess.PIPE,
     stderr=asyncio.subprocess.PIPE)
     stdout, stderr = await proc1.communicate()
