@@ -40,6 +40,19 @@ namespace SpectruMineAPI.Services.Auth
             {
                 if (!user.Verified)
                 {
+                    /* На случай если передумаем перезаписывать незарегавшегося пользователя
+                    foreach(var Code in user.MailCodes)
+                    {
+                        if(Code.ExpireAt < DateTime.UtcNow)
+                        {
+                            user.MailCodes.Remove(Code);
+                        }
+                    }
+                    if(user.MailCodes.Count > 0)
+                    {
+                        return Errors.Conflict;
+                    }
+                    */
                     await Users.RemoveAsync(user.Id);
                 }
                 else return Errors.Conflict;
