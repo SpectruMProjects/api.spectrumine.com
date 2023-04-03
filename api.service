@@ -1,6 +1,7 @@
 [Unit]
     Disctiption=SpectruMAPI Service
 [Service]
+    RootDirectory=/home/master/dev/back/Publish/
     ExecStart=/home/master/dev/back/Publish/SpectruMineAPI
     Type=idle
     KillMode=process
