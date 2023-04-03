@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>SpectruMineAPI.Program</StartupObject>
     <Title>spectrumineapi</Title>
-    <Version>0.1.3.485</Version>
+    <Version>0.1.4.3817</Version>
   </PropertyGroup>
 
   <ItemGroup>
