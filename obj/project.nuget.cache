@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "dD7v/ajSh4Wqx+BmD83ZKf45IBruetQPz3eC+E4L0LTq/pNsLaocoVnhn16AoZPtGhQpeIgdSlTZ6ji9h9Cavw==",
+  "dgSpecHash": "zoj4gjMAdSlJDZseUw2tH6uQUMY3n0aPDCN3HCaV54707RgwvCs5kldES5jA17JJjHGI75PjSv9cI240H/vb2Q==",
   "success": true,
   "projectFilePath": "D:\\GitHub\\api.spectrumine.com\\SpectruMineAPI.csproj",
   "expectedPackageFiles": [
@@ -42,7 +42,10 @@
     "C:\\Users\\Lisoveliy\\.nuget\\packages\\system.security.cryptography.pkcs\\6.0.0\\system.security.cryptography.pkcs.6.0.0.nupkg.sha512",
     "C:\\Users\\Lisoveliy\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512",
     "C:\\Users\\Lisoveliy\\.nuget\\packages\\system.text.encoding.codepages\\6.0.0\\system.text.encoding.codepages.6.0.0.nupkg.sha512",
-    "C:\\Users\\Lisoveliy\\.nuget\\packages\\zstdsharp.port\\0.6.2\\zstdsharp.port.0.6.2.nupkg.sha512"
+    "C:\\Users\\Lisoveliy\\.nuget\\packages\\zstdsharp.port\\0.6.2\\zstdsharp.port.0.6.2.nupkg.sha512",
+    "C:\\Users\\Lisoveliy\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\7.0.4\\microsoft.netcore.app.runtime.linux-x64.7.0.4.nupkg.sha512",
+    "C:\\Users\\Lisoveliy\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\7.0.4\\microsoft.aspnetcore.app.runtime.linux-x64.7.0.4.nupkg.sha512",
+    "C:\\Users\\Lisoveliy\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\7.0.4\\microsoft.netcore.app.host.linux-x64.7.0.4.nupkg.sha512"
   ],
   "logs": []
 }

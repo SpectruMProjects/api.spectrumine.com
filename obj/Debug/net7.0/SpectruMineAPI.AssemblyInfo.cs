@@ -13,11 +13,11 @@ using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("SpectruMineAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("0.1.0.34428")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.0.34428")]
 [assembly: System.Reflection.AssemblyProductAttribute("SpectruMineAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SpectruMineAPI")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("0.1.0.34428")]
 
 // Создано классом WriteCodeFragment MSBuild.
 
