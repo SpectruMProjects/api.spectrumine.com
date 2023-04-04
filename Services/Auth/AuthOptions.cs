@@ -11,5 +11,6 @@ namespace SpectruMineAPI.Services.Auth
         public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
         public static bool UseMail = true; //Активировать через почту?
+        public static bool UseMojangChecks = true; //Mojang UUID get
     }
 }

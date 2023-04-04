@@ -1,10 +1,13 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using SpectruMineAPI.Models;
+using SpectruMineAPI.Models.MojangResponses;
 using SpectruMineAPI.Services.Database;
+using SpectruMineAPI.Services.Hardcore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace SpectruMineAPI.Services.Auth
@@ -13,10 +16,12 @@ namespace SpectruMineAPI.Services.Auth
     {
         private UserCRUD Users;
         private Mail.MailSenderService MailService;
-        public AuthService(UserCRUD users, Mail.MailSenderService mailService)
+        private ILogger Logger;
+        public AuthService(UserCRUD users, Mail.MailSenderService mailService, ILogger<HardcoreService> logger)
         {
             Users = users;
             MailService = mailService;
+            Logger = logger;
         }
 
         public async Task<User?> GetUserById(string id)
@@ -34,12 +39,30 @@ namespace SpectruMineAPI.Services.Auth
             {
                 return Errors.RegexNotMatch;
             }
+            var uuid = await GetUUIDFromMojang(Username);
+            if (uuid == null && AuthOptions.UseMojangChecks)
+            {
+                return Errors.UUIDFailed;
+            }
             //Секция проверки существования другого аккаунта
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
             if (user != null)
             {
                 if (!user.Verified)
                 {
+                    /* На случай если передумаем перезаписывать незарегавшегося пользователя
+                    foreach(var Code in user.MailCodes)
+                    {
+                        if(Code.ExpireAt < DateTime.UtcNow)
+                        {
+                            user.MailCodes.Remove(Code);
+                        }
+                    }
+                    if(user.MailCodes.Count > 0)
+                    {
+                        return Errors.Conflict;
+                    }
+                    */
                     await Users.RemoveAsync(user.Id);
                 }
                 else return Errors.Conflict;
@@ -55,6 +78,7 @@ namespace SpectruMineAPI.Services.Auth
                     _username = Username.ToLower(),
                     Password = Crypto.CalculateSHA256(Password),
                     Email = Email,
+                    UUID = uuid == null ? Guid.NewGuid().ToString() : uuid,
                     MailCodes = new() {
                     new()
                     {
@@ -68,21 +92,29 @@ namespace SpectruMineAPI.Services.Auth
             }
             else
             {
-                Console.WriteLine("Activation code is: " + code);
+                Logger.LogInformation("Activation code is: " + code);
                 await Users.CreateAsync(new()
                 {
                     Username = Username,
                     _username = Username.ToLower(),
                     Password = Crypto.CalculateSHA256(Password),
                     Email = Email,
+                    UUID = uuid == null ? Guid.NewGuid().ToString() : uuid,
                     MailCodes = new() {new(){
-            Code = code,
-            ExpireAt = DateTime.UtcNow.AddMinutes(5)}},
+                    Code = code,
+                    ExpireAt = DateTime.UtcNow.AddMinutes(5)}},
                     Verified = false
                 });
             }
 
             return Errors.Success;
+        }
+        private async Task<string> GetUUIDFromMojang(string username)
+        {
+            HttpClient httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("https://api.mojang.com/users/profiles/minecraft/" + username);
+            var resp = JsonSerializer.Deserialize<MojangSuccessResponse>(await response.Content.ReadAsStringAsync());
+            return resp!.id;
         }
 
         public async Task<Errors> CheckUser(string Username, string Password)
@@ -110,7 +142,6 @@ namespace SpectruMineAPI.Services.Auth
                 await Users.UpdateAsync(user.Id, user);
                 return Errors.TokenExpire;
             }
-
             return Errors.Success;
         }
 
@@ -205,7 +236,7 @@ namespace SpectruMineAPI.Services.Auth
             return await Users.GetAsync();
         }
 
-        public enum Errors { RegexNotMatch, Success, Conflict, UserNotFound, InvalidPassword, TokenExpire, AccountDisabled }
+        public enum Errors { RegexNotMatch, Success, Conflict, UserNotFound, InvalidPassword, TokenExpire, AccountDisabled, UUIDFailed }
 
         public record Tokens(string AccessToken, RefreshToken RefreshToken);
     }

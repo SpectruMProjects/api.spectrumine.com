@@ -30,6 +30,8 @@ namespace SpectruMineAPI.Controllers
                         return BadRequest(new Models.Error(status.ToString(), "InvalidData"));
                     case AuthService.Errors.Conflict:
                         return Conflict(new Models.Error(status.ToString(), "AccountExists"));
+                    case AuthService.Errors.UUIDFailed:
+                        return BadRequest(new Models.Error(status.ToString(), "FailedToGetMojangUUID"));
                 }
             }
             return Ok();

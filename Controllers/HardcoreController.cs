@@ -28,9 +28,16 @@ namespace SpectruMineAPI.Controllers
             return Ok();
         }
         [HttpGet("stats/{username}")]
-        public async Task<ActionResult> GetStats(string username)
+        public async Task<ActionResult<HardcoreDTO.UserStats>> GetStats(string username)
         {
-            return Ok();
+            var result = await hardcoreService.CheckStatsAvailable(username);
+            switch (result)
+            {
+                case HardcoreService.Errors.UserNotFound:
+                    return NotFound(new Models.Error(result.ToString(), "StatisticsForThisUserNotExist"));
+            }
+            var stats = await hardcoreService.GetStats(username);
+            return stats.Map();
         }
     }
 }
