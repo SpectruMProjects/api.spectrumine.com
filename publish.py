@@ -6,7 +6,7 @@ pattern = "alpha"
 filename = "SpectruMineAPI.csproj"
 file = xml.etree.ElementTree.parse(filename)
 publishdir = "./Publish"
-publish = False
+publish = True
 
 version = file.getroot().find("PropertyGroup").find("Version")
 print("Generating version")
