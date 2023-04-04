@@ -15,6 +15,8 @@ namespace SpectruMineAPI
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -52,6 +54,7 @@ namespace SpectruMineAPI
             app.UseAuthentication();
             app.UseAuthorization();
             AuthOptions.UseMail = app.Configuration.GetValue<bool>("UseMail");
+            AuthOptions.UseMojangChecks = app.Configuration.GetValue<bool>("MojangChecks");
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
