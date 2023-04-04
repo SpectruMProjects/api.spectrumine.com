@@ -7,11 +7,9 @@ namespace SpectruMineAPI.Services.Database
     public class UserCRUD
     {
         private readonly IMongoCollection<User> mongoCollection;
-        public UserCRUD(IOptions<DBSettings> options)
+        public UserCRUD(MongoService service)
         {
-            var mongoClient = new MongoClient(options.Value.ConnectionString);
-            var database = mongoClient.GetDatabase(options.Value.DatabaseName);
-            mongoCollection = database.GetCollection<User>("users");
+            mongoCollection = service.UserCollection;
         }
         public async Task<List<User>> GetAsync() =>
             await mongoCollection.Find(_ => true).ToListAsync();
