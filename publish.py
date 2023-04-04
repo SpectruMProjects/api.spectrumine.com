@@ -6,7 +6,7 @@ pattern = "alpha"
 filename = "SpectruMineAPI.csproj"
 file = xml.etree.ElementTree.parse(filename)
 publishdir = "./Publish"
-publish = true
+publish = False
 
 version = file.getroot().find("PropertyGroup").find("Version")
 print("Generating version")
@@ -64,5 +64,5 @@ async def Proc():
         print(f'\n{stderr.decode()}')
     elapsed = str(round(time.time() - time1, 2)) 
     print('[DONE]\nTime spent ' + elapsed + 's.') 
-if publish is true:
+if publish is True:
     asyncio.run(Proc())
