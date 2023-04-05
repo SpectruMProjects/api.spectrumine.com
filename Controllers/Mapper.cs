@@ -23,7 +23,7 @@ namespace SpectruMineAPI.Controllers
         }
         public static HardcoreDTO.UserStats Map(this UserStats stats)
         {
-            return new(stats.username, stats.lastServerTime, stats.timeOnServer, stats.stats.Map());
+            return new(stats.username, stats.lastServerTime, stats.timeOnServer, stats.stats.Map(), stats.isRespawningNow);
         }
     }
 }

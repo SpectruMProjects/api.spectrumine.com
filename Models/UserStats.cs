@@ -11,6 +11,7 @@ namespace SpectruMineAPI.Models
         public long lastServerTime { get; set; }
         public long timeOnServer { get; set; }
         public string username { get; set; } = string.Empty;
+        public bool isRespawningNow { get; set; }
         public List<Stats> stats { get; set; } = new List<Stats>();
     }
     public class Stats
