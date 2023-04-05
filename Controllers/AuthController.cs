@@ -32,6 +32,8 @@ namespace SpectruMineAPI.Controllers
                         return Conflict(new Models.Error(status.ToString(), "AccountExists"));
                     case AuthService.Errors.UUIDFailed:
                         return BadRequest(new Models.Error(status.ToString(), "FailedToGetMojangUUID"));
+                    case AuthService.Errors.MailRegistered:
+                        return Conflict(new Models.Error(status.ToString(), "UseOtherMailOrRestoreAccess"));
                 }
             }
             return Ok();

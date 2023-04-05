@@ -65,7 +65,9 @@ namespace SpectruMineAPI.Services.Auth
                     */
                     await Users.RemoveAsync(user.Id);
                 }
-                else return Errors.Conflict;
+                else if (user.Email == Email) {
+                    return Errors.MailRegistered;
+                }else return Errors.Conflict;
             }
             var code = Crypto.CalculateMD5(DateTime.UtcNow.ToString());
             //Создание аккаунта
@@ -116,12 +118,17 @@ namespace SpectruMineAPI.Services.Auth
             var resp = JsonSerializer.Deserialize<MojangSuccessResponse>(await response.Content.ReadAsStringAsync());
             return resp!.id;
         }
-
         public async Task<Errors> CheckUser(string Username, string Password)
         {
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
 
-            if (user == null) return Errors.UserNotFound;
+            if (user == null) {
+                user = await Users.GetAsync(x => x.Email == Username.ToLower());
+                if(user == null)
+                {
+                    return Errors.UserNotFound;
+                }
+            }
             if (user.Password != Crypto.CalculateSHA256(Password)) return Errors.InvalidPassword;
             if (!user.Verified) return Errors.AccountDisabled;
 
@@ -148,7 +155,10 @@ namespace SpectruMineAPI.Services.Auth
         public async Task<Tokens> GenerateTokens(string Username)
         {
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
-            if (user == null) throw new ArgumentNullException($"{nameof(user)} returned null");
+            if (user == null) {
+                user = await Users.GetAsync(x => x.Email == Username.ToLower());
+                if(user == null) throw new ArgumentNullException($"{nameof(user)} returned null");
+            } 
             var refreshToken = new RefreshToken()
             {
                 Token = Crypto.CalculateSHA256(DateTime.UtcNow.ToString()),
@@ -236,7 +246,7 @@ namespace SpectruMineAPI.Services.Auth
             return await Users.GetAsync();
         }
 
-        public enum Errors { RegexNotMatch, Success, Conflict, UserNotFound, InvalidPassword, TokenExpire, AccountDisabled, UUIDFailed }
+        public enum Errors { RegexNotMatch, Success, Conflict, UserNotFound, InvalidPassword, TokenExpire, AccountDisabled, UUIDFailed, MailRegistered }
 
         public record Tokens(string AccessToken, RefreshToken RefreshToken);
     }
