@@ -20,7 +20,7 @@ namespace SpectruMineAPI.Controllers
             switch (status)
             {
                 case null:
-                    return NotFound(new Models.Error(status.ToString(), "IncorrectUsername"));
+                    return NotFound(new Models.Error("UserNotFound", "IncorrectUsername"));
             }
             return Ok();
         }
