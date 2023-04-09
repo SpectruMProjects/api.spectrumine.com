@@ -32,6 +32,8 @@ namespace SpectruMineAPI.Controllers
                         return Conflict(new Models.Error(status.ToString(), "AccountExists"));
                     case AuthService.Errors.UUIDFailed:
                         return BadRequest(new Models.Error(status.ToString(), "FailedToGetMojangUUID"));
+                    case AuthService.Errors.MailRegistered:
+                        return Conflict(new Models.Error(status.ToString(), "UseOtherMailOrRestoreAccess"));
                 }
             }
             return Ok();
@@ -131,7 +133,7 @@ namespace SpectruMineAPI.Controllers
         [HttpPost("ResetPasswordAuth")]
         public async Task<ActionResult> ResetPassAuth(ResetPassQueryAuth query)
         {
-            var userMail = await authService.GetMailByUsername(User.Identity!.Name!);
+            var userMail = await authService.GetMailById(User.Identity!.Name!);
             if (userMail == null) return BadRequest(new Models.Error("Null", "Каким образом это вообще могло возникнуть? Ты долбаёб?"));
             var status = await authService.UpdatePassword(userMail, query.NewPassword);
             switch (status)
