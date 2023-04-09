@@ -234,9 +234,9 @@ namespace SpectruMineAPI.Services.Auth
             return Errors.Success;
         }
 
-        public async Task<string?> GetMailByUsername(string username)
+        public async Task<string?> GetMailById(string id)
         {
-            var user = await Users.GetAsync(x => x._username == username);//Предусматривается что тут username уже ToLower
+            var user = await Users.GetAsync(x => x.Id == id);//Предусматривается что тут username уже ToLower
             if (user == null) return null;
             return user.Email;
         }
