@@ -65,9 +65,11 @@ namespace SpectruMineAPI.Services.Auth
                     */
                     await Users.RemoveAsync(user.Id);
                 }
-                else if (user.Email == Email) {
-                    return Errors.MailRegistered;
-                }else return Errors.Conflict;
+                else return Errors.Conflict;
+            }
+            if (await Users.GetAsync(user => user.Email == Email) != null)
+            {
+                return Errors.MailRegistered;
             }
             var code = Crypto.CalculateMD5(DateTime.UtcNow.ToString());
             //Создание аккаунта
