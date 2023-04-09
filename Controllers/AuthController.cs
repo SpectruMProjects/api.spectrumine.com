@@ -98,7 +98,6 @@ namespace SpectruMineAPI.Controllers
       var response = await authService.UpdateTokens(query.RefreshToken);
       return new UpdateResponse(response.AccessToken, response.RefreshToken.Token);
     }
-
     /// <summary>
     /// Logout current token method
     /// </summary>

@@ -154,6 +154,10 @@ namespace SpectruMineAPI.Services.Auth
             return Errors.Success;
         }
 
+        /* TODO:
+         * Добавить внутрь GenerateTokens и UpdateTokens новый метод проверяющий UUID пользователя 
+         * и пытающийся изменить ник при его изменении. Если же ник проверить не удалось - оставить старый
+         */
         public async Task<Tokens> GenerateTokens(string Username)
         {
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
