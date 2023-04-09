@@ -13,7 +13,7 @@ namespace SpectruMineAPI.Controllers
         private AuthService authService;
         public AuthController(AuthService authService) => this.authService = authService;
 
-        [HttpPost("Checklicense/{username}")]
+        [HttpGet("Checklicense/{username}")]
         public async Task<ActionResult> CheckLicense(string username)
         {
             var status = await authService.GetUUIDFromMojang(username);
