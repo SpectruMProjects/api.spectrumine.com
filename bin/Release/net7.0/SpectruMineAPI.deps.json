@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v7.0": {
-      "SpectruMineAPI/0.1.4.5548": {
+      "SpectruMineAPI/0.1.4.9534": {
         "dependencies": {
           "MailKit": "3.5.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.3",
@@ -344,7 +344,7 @@
     }
   },
   "libraries": {
-    "SpectruMineAPI/0.1.4.5548": {
+    "SpectruMineAPI/0.1.4.9534": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
