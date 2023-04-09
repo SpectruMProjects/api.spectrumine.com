@@ -113,7 +113,7 @@ namespace SpectruMineAPI.Services.Auth
 
             return Errors.Success;
         }
-        private async Task<string> GetUUIDFromMojang(string username)
+        public async Task<string?> GetUUIDFromMojang(string username)
         {
             HttpClient httpClient = new HttpClient();
             var response = await httpClient.GetAsync("https://api.mojang.com/users/profiles/minecraft/" + username);
