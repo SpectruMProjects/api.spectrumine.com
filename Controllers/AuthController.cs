@@ -16,7 +16,7 @@ namespace SpectruMineAPI.Controllers
         [HttpGet("Checklicense/{username}")]
         public async Task<ActionResult> CheckLicense(string username)
         {
-            var status = await authService.GetUUIDFromMojang(username);
+            var status = await AuthMojangAPI.GetUUIDFromMojang(username);
             switch (status)
             {
                 case null:
