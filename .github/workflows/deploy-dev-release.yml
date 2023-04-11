@@ -10,6 +10,7 @@ jobs:
   Deploy-Dev-Build:
     runs-on: self-hosted
     steps:
+      - run: cd ~/dev/back && git reset --hard
       - run: systemctl --user stop api.service
       - run: cd ~/dev/back/ && git pull origin --force ubuntu-dev-release
       - run: cd ~/dev/back/Publish && chmod +x SpectruMineAPI
