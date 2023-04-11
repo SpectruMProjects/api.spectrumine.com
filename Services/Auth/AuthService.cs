@@ -39,7 +39,7 @@ namespace SpectruMineAPI.Services.Auth
             {
                 return Errors.RegexNotMatch;
             }
-            var uuid = await GetUUIDFromMojang(Username);
+            var uuid = await AuthMojangAPI.GetUUIDFromMojang(Username);
             if (uuid == null && AuthOptions.UseMojangChecks)
             {
                 return Errors.UUIDFailed;
@@ -113,13 +113,6 @@ namespace SpectruMineAPI.Services.Auth
 
             return Errors.Success;
         }
-        public async Task<string?> GetUUIDFromMojang(string username)
-        {
-            HttpClient httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("https://api.mojang.com/users/profiles/minecraft/" + username);
-            var resp = JsonSerializer.Deserialize<MojangSuccessResponse>(await response.Content.ReadAsStringAsync());
-            return resp!.id;
-        }
         public async Task<Errors> CheckUser(string Username, string Password)
         {
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
@@ -165,6 +158,13 @@ namespace SpectruMineAPI.Services.Auth
                 user = await Users.GetAsync(x => x.Email == Username.ToLower());
                 if(user == null) throw new ArgumentNullException($"{nameof(user)} returned null");
             } 
+            //Username
+            var username = await AuthMojangAPI.GetUsernameByUUID(user.UUID);
+            if(username != null && username.ToLower() != user._username)
+            {
+                user.Username = username;
+                user._username = username.ToLower();
+            }
             var refreshToken = new RefreshToken()
             {
                 Token = Crypto.CalculateSHA256(DateTime.UtcNow.ToString()),
@@ -181,6 +181,13 @@ namespace SpectruMineAPI.Services.Auth
             var userList = await Users.GetAsync();
             var user = userList.FirstOrDefault(x => x.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken) != null);
             if (user == null) throw new ArgumentNullException($"{nameof(user)} returned null");
+            var username = await AuthMojangAPI.GetUsernameByUUID(user.UUID);
+           //Username
+            if (username != null && username.ToLower() != user._username)
+            {
+                user.Username = username;
+                user._username = username.ToLower();
+            }
             var newToken = new RefreshToken()
             {
                 Token = Crypto.CalculateSHA256(DateTime.UtcNow.ToString()),
