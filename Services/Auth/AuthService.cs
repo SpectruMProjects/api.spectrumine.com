@@ -132,7 +132,9 @@ namespace SpectruMineAPI.Services.Auth
 
         public async Task<Errors> CheckToken(string refreshToken)
         {
-            var user = await Users.GetAsync(x => x.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken) != null);
+            var userList = await Users.GetAsync();
+            var user = userList.FirstOrDefault(x => x.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken) != null);
+
             if (user == null) return Errors.UserNotFound;
             var Token = user.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken);
 
@@ -176,7 +178,8 @@ namespace SpectruMineAPI.Services.Auth
 
         public async Task<Tokens> UpdateTokens(string refreshToken)
         {
-            var user = await Users.GetAsync(x => x.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken) != null);
+            var userList = await Users.GetAsync();
+            var user = userList.FirstOrDefault(x => x.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken) != null);
             if (user == null) throw new ArgumentNullException($"{nameof(user)} returned null");
             var username = await AuthMojangAPI.GetUsernameByUUID(user.UUID);
            //Username
