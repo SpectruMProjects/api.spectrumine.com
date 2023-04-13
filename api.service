@@ -1,6 +1,6 @@
 [Service]
-    WorkingDirectory=/home/master/dev/back/Publish/
-    ExecStart=/home/master/dev/back/Publish/SpectruMineAPI
+    WorkingDirectory=/home/lisoveliy/development/back/Publish/
+    ExecStart=/home/lisoveliy/development/back/Publish/SpectruMineAPI
     Type=idle
     KillMode=process
 
