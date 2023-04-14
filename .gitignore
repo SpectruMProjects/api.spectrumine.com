@@ -206,6 +206,7 @@ _pkginfo.txt
 !?*.[Cc]ache/
 
 # Others
+bin/
 ClientBin/
 ~$*
 *~
