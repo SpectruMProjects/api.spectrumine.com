@@ -15,6 +15,8 @@ namespace SpectruMineAPI.Services.Database.CRUDs
             await mongoCollection.Find(_ => true).ToListAsync();
         public async Task<Product?> GetAsync(System.Linq.Expressions.Expression<Func<Product, bool>> expression) =>
             await mongoCollection.Find(expression).FirstOrDefaultAsync();
+        public async Task<List<Product>> GetAsyncList(System.Linq.Expressions.Expression<Func<Product, bool>> expression) =>
+            await mongoCollection.Find(expression).ToListAsync();
         public async Task CreateAsync(Product entity) =>
             await mongoCollection.InsertOneAsync(entity);
         public async Task UpdateAsync(string id, Product entity) =>
