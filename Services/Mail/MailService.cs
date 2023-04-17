@@ -1,12 +1,12 @@
 ﻿using SpectruMineAPI.Models;
 using SpectruMineAPI.Services.Auth;
-using SpectruMineAPI.Services.Database;
+using SpectruMineAPI.Services.Database.CRUDs;
 
 namespace SpectruMineAPI.Services.Mail
 {
     public class MailService
     {
-        private UserCRUD Users;
+        private ICRUD<User> Users;
         private readonly AuthService AuthService;
         public MailService(UserCRUD users, AuthService authService)
         {

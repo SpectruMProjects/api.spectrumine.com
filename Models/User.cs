@@ -16,4 +16,5 @@ public class User
     public bool Verified { get; set; } = false;
     public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     public List<MailCode> MailCodes { get; set; } = new List<MailCode>();
+    public List<ObjectId>? Inventory { get; set; } = null;
 }

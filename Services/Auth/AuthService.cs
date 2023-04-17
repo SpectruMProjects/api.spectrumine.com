@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using SpectruMineAPI.Models;
 using SpectruMineAPI.Models.MojangResponses;
-using SpectruMineAPI.Services.Database;
+using SpectruMineAPI.Services.Database.CRUDs;
 using SpectruMineAPI.Services.Hardcore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,7 +14,7 @@ namespace SpectruMineAPI.Services.Auth
 {
     public class AuthService
     {
-        private UserCRUD Users;
+        private ICRUD<User> Users;
         private Mail.MailSenderService MailService;
         private ILogger Logger;
         public AuthService(UserCRUD users, Mail.MailSenderService mailService, ILogger<HardcoreService> logger)
@@ -63,7 +63,7 @@ namespace SpectruMineAPI.Services.Auth
                         return Errors.Conflict;
                     }
                     */
-                    await Users.RemoveAsync(user.Id);
+                    await Users.DeleteAsync(user.Id);
                 }
                 else return Errors.Conflict;
             }
