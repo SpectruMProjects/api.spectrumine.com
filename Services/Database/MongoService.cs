@@ -8,6 +8,7 @@ namespace SpectruMineAPI.Services.Database
     {
         public readonly IMongoCollection<User> UserCollection;
         public readonly IMongoCollection<UserStats> HCStatsCollection;
+        public readonly IMongoCollection<Product> ProductCollection;
         MongoClient MongoClient;
         public MongoService(IOptions<DBSettings> options)
         { 
@@ -15,6 +16,7 @@ namespace SpectruMineAPI.Services.Database
             var database = MongoClient.GetDatabase(options.Value.DatabaseName);
             UserCollection = database.GetCollection<User>("users");
             HCStatsCollection = database.GetCollection<UserStats>("hardcore-stats");
+            ProductCollection = database.GetCollection<Product>("products");
         }
     }
 }

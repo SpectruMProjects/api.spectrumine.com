@@ -1,13 +1,13 @@
 ﻿using SpectruMineAPI.Models;
-using SpectruMineAPI.Services.Database;
+using SpectruMineAPI.Services.Database.CRUDs;
 using static SpectruMineAPI.Controllers.Mapper;
 
 namespace SpectruMineAPI.Services.Hardcore
 {
     public class HardcoreService
     {
-        private UserCRUD Users;
-        private HCStatsCRUD Stats;
+        private ICRUD<User> Users;
+        private ICRUD<UserStats> Stats;
 
         public HardcoreService(UserCRUD Users, HCStatsCRUD Stats)
         {

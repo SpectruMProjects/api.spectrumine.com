@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SpectruMineAPI.Services.Auth;
 using SpectruMineAPI.Services.Database;
+using SpectruMineAPI.Services.Database.CRUDs;
 using SpectruMineAPI.Services.Hardcore;
 using SpectruMineAPI.Services.Mail;
+using SpectruMineAPI.Services.Products;
 
 namespace SpectruMineAPI
 {
@@ -39,11 +41,13 @@ namespace SpectruMineAPI
             builder.Services.AddSingleton<MongoService>();
             builder.Services.AddSingleton<UserCRUD>();
             builder.Services.AddSingleton<HCStatsCRUD>();
+            builder.Services.AddSingleton<ProductsCRUD>();
             //
             builder.Services.AddSingleton<MailSenderService>();
             builder.Services.AddSingleton<MailService>();
             builder.Services.AddSingleton<AuthService>();
             builder.Services.AddSingleton<HardcoreService>();
+            builder.Services.AddSingleton<ProductsService>();
             var app = builder.Build();
 
             app.UseCors(p => p
