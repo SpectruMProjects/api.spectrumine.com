@@ -15,5 +15,17 @@ namespace SpectruMineAPI.Controllers
         {
             return Ok(await ProductsService.GetProductsAsync(category));
         }
+        [HttpPost("Debug/CreateRandProduct")]
+        public async Task<ActionResult> CreateRand()
+        {
+            await ProductsService.CreateProduct();
+            return Ok();
+        }
+        [HttpPost("Debug/CreateProduct")]
+        public async Task<ActionResult> CreateRand(CreateProductDTO query)
+        {
+            await ProductsService.CreateProduct(query.Name, query.Description, query.Category, query.ImgUrl, query.ObjUrl, query.MatUrl, query.Price);
+            return Ok();
+        }
     }
 }

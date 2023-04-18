@@ -13,5 +13,7 @@ namespace SpectruMineAPI.Models
         public string Category { get; set; } = string.Empty;
         public string ImgUrl { get; set; } = string.Empty;
         public string ObjUrl { get; set; } = string.Empty;
+        public string MatUrl { get; set; } = string.Empty;
+        public float Price { get; set; }
     }
 }
