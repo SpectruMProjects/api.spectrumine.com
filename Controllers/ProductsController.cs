@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SpectruMineAPI.Services.Products;
 
@@ -11,9 +12,17 @@ namespace SpectruMineAPI.Controllers
         readonly ProductsService ProductsService;
         public ProductsController(ProductsService productsService) => ProductsService = productsService;
         [HttpGet("{category}")]
-        public async Task<IActionResult> GetCategory(string category)
+        public async Task<ActionResult> GetCategory(string category)
         {
             return Ok(await ProductsService.GetProductsAsync(category));
+        }
+        [Authorize]
+        [HttpGet("GetUserInventory")]
+        public async Task<ActionResult> GetInventory()
+        {
+            var inventory = await ProductsService.GetInventoryById(User.Identity!.Name!);
+            if (inventory == null) return BadRequest(new Models.Error("UserNotFound", "UserDoesNotExist"));
+            return Ok(inventory);
         }
         [HttpPost("Debug/CreateRandProduct")]
         public async Task<ActionResult> CreateRand()

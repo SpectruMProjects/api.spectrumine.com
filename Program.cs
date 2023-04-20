@@ -1,11 +1,14 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.IdentityModel.Tokens;
+using SpectruMineAPI.Controllers;
 using SpectruMineAPI.Services.Auth;
 using SpectruMineAPI.Services.Database;
 using SpectruMineAPI.Services.Database.CRUDs;
 using SpectruMineAPI.Services.Hardcore;
 using SpectruMineAPI.Services.Mail;
+using SpectruMineAPI.Services.Payment;
 using SpectruMineAPI.Services.Products;
 
 namespace SpectruMineAPI
@@ -34,29 +37,31 @@ namespace SpectruMineAPI
                     ValidateIssuerSigningKey = true,
                 };
             });
-            builder.Services.Configure<DBSettings>(builder.Configuration.GetSection("MongoSettings"));
-            builder.Services.Configure<MailData>(builder.Configuration.GetSection("SMTPData"));
-            AuthOptions.KEY = builder.Configuration.GetValue<string>("JWTSecret")!;
+            //Services
             //Db services
+            builder.Services.Configure<DBSettings>(builder.Configuration.GetSection("MongoSettings"));
             builder.Services.AddSingleton<MongoService>();
             builder.Services.AddSingleton<UserCRUD>();
             builder.Services.AddSingleton<HCStatsCRUD>();
             builder.Services.AddSingleton<ProductsCRUD>();
-            //
+            //Services
+            builder.Services.Configure<MailData>(builder.Configuration.GetSection("SMTPData"));
             builder.Services.AddSingleton<MailSenderService>();
             builder.Services.AddSingleton<MailService>();
             builder.Services.AddSingleton<AuthService>();
             builder.Services.AddSingleton<HardcoreService>();
             builder.Services.AddSingleton<ProductsService>();
+            builder.Services.Configure<PaymentData>(builder.Configuration.GetSection("PaymentData"));
             var app = builder.Build();
-
+            //CORS
             app.UseCors(p => p
               .AllowAnyOrigin()
               .AllowAnyHeader()
               .AllowAnyMethod());
-
+            //JWT Init
             app.UseAuthentication();
             app.UseAuthorization();
+            AuthOptions.KEY = builder.Configuration.GetValue<string>("JWTSecret")!;
             AuthOptions.UseMail = app.Configuration.GetValue<bool>("UseMail");
             AuthOptions.UseMojangChecks = app.Configuration.GetValue<bool>("MojangChecks");
             // Configure the HTTP request pipeline.

@@ -1,5 +1,7 @@
-﻿using SpectruMineAPI.Models;
+﻿using MongoDB.Bson;
+using SpectruMineAPI.Models;
 using SpectruMineAPI.Services.Database.CRUDs;
+using System.Xml.Linq;
 
 namespace SpectruMineAPI.Services.Products
 {
@@ -7,9 +9,11 @@ namespace SpectruMineAPI.Services.Products
     {
         //TODO: Change CRUD to ICRUD (Add method with List<T> GetAsyncList
         readonly ProductsCRUD Products;
-        public ProductsService(ProductsCRUD products)
+        readonly ICRUD<User> Users;
+        public ProductsService(ProductsCRUD products, UserCRUD users)
         { 
             Products = products;
+            Users = users;
         }
         public async Task<List<Product>> GetProductsAsync(string category)
         {
@@ -41,6 +45,18 @@ namespace SpectruMineAPI.Services.Products
                 MatUrl = MatUrl,
                 Price = Price
             });
+        }
+        public async Task<List<Product>?> GetInventoryById(string id)
+        {
+            var user = await Users.GetAsync(x => x.Id == id);
+            if (user == null) return null;
+            var products = new List<Product>();
+            user.Inventory.ForEach(async y =>
+            {
+                var product = await Products.GetAsync(x => x.Id == y.ToString());
+                products.Add(product!);
+            });
+            return products;
         }
     }
 }
