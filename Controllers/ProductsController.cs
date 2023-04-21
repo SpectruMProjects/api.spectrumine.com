@@ -24,6 +24,13 @@ namespace SpectruMineAPI.Controllers
             if (inventory == null) return BadRequest(new Models.Error("UserNotFound", "UserDoesNotExist"));
             return Ok(inventory);
         }
+        [HttpGet("GetUserInventory/{username}")]
+        public async Task<ActionResult> GetInventory(string username)
+        {
+            var inventory = await ProductsService.GetInventoryByUsername(username);
+            if (inventory == null) return BadRequest(new Models.Error("UserNotFound", "UserDoesNotExist"));
+            return Ok(inventory);
+        }
         [HttpPost("Debug/CreateRandProduct")]
         public async Task<ActionResult> CreateRand()
         {
