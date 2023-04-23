@@ -54,7 +54,8 @@ namespace SpectruMineAPI.Services.Products
             user.Inventory.ForEach(async y =>
             {
                 var product = await Products.GetAsync(x => x.Id == y.ToString());
-                products.Add(product!);
+                if (product == null) return;
+                products.Add(product);
             });
             return products;
         }
