@@ -18,18 +18,18 @@ namespace SpectruMineAPI.Controllers
         }
         [Authorize]
         [HttpGet("GetUserInventory")]
-        public async Task<ActionResult> GetInventory()
+        public async Task<ActionResult<List<Models.Product>>> GetInventory()
         {
             var inventory = await ProductsService.GetInventoryById(User.Identity!.Name!);
             if (inventory == null) return BadRequest(new Models.Error("UserNotFound", "UserDoesNotExist"));
-            return Ok(inventory);
+            return inventory;
         }
         [HttpGet("GetUserInventory/{username}")]
-        public async Task<ActionResult> GetInventory(string username)
+        public async Task<ActionResult<List<Models.Product>>> GetInventory(string username)
         {
             var inventory = await ProductsService.GetInventoryByUsername(username);
             if (inventory == null) return BadRequest(new Models.Error("UserNotFound", "UserDoesNotExist"));
-            return Ok(inventory);
+            return inventory;
         }
         [HttpPost("Debug/CreateRandProduct")]
         public async Task<ActionResult> CreateRand()
