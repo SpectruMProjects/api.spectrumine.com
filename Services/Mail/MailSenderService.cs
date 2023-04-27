@@ -24,10 +24,14 @@ namespace SpectruMineAPI.Services.Mail
       using var emailMessage = new MimeMessage();
       emailMessage.From.Add(new MailboxAddress("Администрация сайта", mailData.Login));
       emailMessage.To.Add(new MailboxAddress("", subject));
-      emailMessage.Subject = "helloworld";
+      emailMessage.Subject = "Подтверждение регистрации";
       emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
       {
-        Text = code
+        Text = CreateHtml(
+          "Подтверждение регистрации",
+          "Рады приветсвовать вас на нашей платформе. Чтобы подтвердить регистрацию нажмите на кнопку",
+          "htts://dev.spectrumine.com/auth/activate-register/" + code
+          )
       };
 
       using (var client = new SmtpClient())
@@ -53,7 +57,11 @@ namespace SpectruMineAPI.Services.Mail
       emailMessage.Subject = "helloworld";
       emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
       {
-        Text = code
+        Text = CreateHtml(
+          "Смена пароля",
+          "Создан запрос для измения пароля на проекте SpectruMine. Чтобы подтвердить смену пароля нажмите на кнопку",
+          "htts://dev.spectrumine.com/auth/activate-change-pass/" + code
+          )
       };
 
       using (var client = new SmtpClient())
@@ -64,6 +72,35 @@ namespace SpectruMineAPI.Services.Mail
 
         await client.DisconnectAsync(true);
       }
+    }
+
+    private string CreateHtml(string title, string text, string link)
+    {
+      return "<!DOCTYPE html>" +
+              "<html lang=\"en\">" +
+              "<head>" +
+                "<meta charset=\"UTF-8\">" +
+                "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">" +
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+                "<title>" + title + "</title>" +
+              "</head>" +
+              "<body>" +
+                "<style>" +
+                  "h1 {text-align: center;}" +
+                  "button {background-color: #73d13d;padding: 1em 2em;}" +
+                  "button a {font-size: large;color: white;text-decoration: none;}" +
+                  "p {padding: 1em;}" +
+                  ".button-container {display: flex;align-items: center;justify-content: center;}" +
+                "</style>" +
+                "<h1>" + title + "</h1>" +
+                "<p>" + text + "</p>" +
+                "<div class=\"button-container\">" +
+                  "<button>" +
+                    "<a href=\"" + link + "\">" + "Подтвердить" + "</a>" +
+                  "</button>" +
+                "</div>" +
+              "</body>" +
+              "</html>";
     }
   }
 }
