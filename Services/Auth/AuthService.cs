@@ -48,36 +48,38 @@ namespace SpectruMineAPI.Services.Auth
                     return Errors.UUIDFailed;
                 }
             }
-            //Секция проверки существования другого аккаунта
-            var user = await Users.GetAsync(x => x._username == Username.ToLower());
-            user = user ?? await Users.GetAsync(x => x.Email == Email.ToLower());
+            // ФАЗА 1 - Удаление неактивированных аккаунтов
+            var user = await Users.GetAsync(x => x._username == Username.ToLower() && !x.Verified);
+            user = user ?? await Users.GetAsync(x => x.Email.ToLower() == Email.ToLower() && !x.Verified);
             if (user != null)
             {
-                if (!user.Verified)
+                /* На случай если передумаем перезаписывать незарегавшегося пользователя
+                foreach(var Code in user.MailCodes)
                 {
-                    /* На случай если передумаем перезаписывать незарегавшегося пользователя
-                    foreach(var Code in user.MailCodes)
+                    if(Code.ExpireAt < DateTime.UtcNow)
                     {
-                        if(Code.ExpireAt < DateTime.UtcNow)
-                        {
-                            user.MailCodes.Remove(Code);
-                        }
+                        user.MailCodes.Remove(Code);
                     }
-                    if(user.MailCodes.Count > 0)
-                    {
-                        return Errors.Conflict;
-                    }
-                    */
-                    await Users.DeleteAsync(user.Id);
                 }
-                else return Errors.Conflict;
-            }
-            if (await Users.GetAsync(user => user.Email == Email) != null)
+                if(user.MailCodes.Count > 0)
+                {
+                    return Errors.Conflict;
+                }
+                */
+                await Users.DeleteAsync(user.Id);
+            }//else ??????
+
+            //ФАЗА 2 - Проверка существующих аккаунтов
+            if (await Users.GetAsync(user => user.Email == Email && user.Verified) != null)
             {
                 return Errors.MailRegistered;
             }
-            var code = Crypto.CalculateMD5(DateTime.UtcNow.ToString());
+            if (await Users.GetAsync(user => user._username == Username.ToLower()) != null)
+            {
+                return Errors.Conflict;
+            }
             //Создание аккаунта
+            var code = Crypto.CalculateMD5(DateTime.UtcNow.ToString());
             if (AuthOptions.UseMail)
             {
                 await Users.CreateAsync(new()
@@ -86,7 +88,7 @@ namespace SpectruMineAPI.Services.Auth
                     _username = Username.ToLower(),
                     Password = Crypto.CalculateSHA256(Password),
                     Email = Email,
-                    UUID = uuid ?? Guid.NewGuid().ToString().Replace("-",""),
+                    UUID = uuid ?? Guid.NewGuid().ToString().Replace("-", ""),
                     MailCodes = new() {
                     new()
                     {
@@ -121,9 +123,10 @@ namespace SpectruMineAPI.Services.Auth
         {
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
 
-            if (user == null) {
+            if (user == null)
+            {
                 user = await Users.GetAsync(x => x.Email == Username.ToLower());
-                if(user == null)
+                if (user == null)
                 {
                     return Errors.UserNotFound;
                 }
@@ -158,13 +161,14 @@ namespace SpectruMineAPI.Services.Auth
         public async Task<Tokens> GenerateTokens(string Username)
         {
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
-            if (user == null) {
+            if (user == null)
+            {
                 user = await Users.GetAsync(x => x.Email == Username.ToLower());
-                if(user == null) throw new ArgumentNullException($"{nameof(user)} returned null");
-            } 
+                if (user == null) throw new ArgumentNullException($"{nameof(user)} returned null");
+            }
             //Username
             var username = await AuthMojangAPI.GetUsernameByUUID(user.UUID);
-            if(username != null && username.ToLower() != user._username)
+            if (username != null && username.ToLower() != user._username)
             {
                 user.Username = username;
                 user._username = username.ToLower();
@@ -186,7 +190,7 @@ namespace SpectruMineAPI.Services.Auth
             var user = userList.FirstOrDefault(x => x.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken) != null);
             if (user == null) throw new ArgumentNullException($"{nameof(user)} returned null");
             var username = await AuthMojangAPI.GetUsernameByUUID(user.UUID);
-           //Username
+            //Username
             if (username != null && username.ToLower() != user._username)
             {
                 user.Username = username;
