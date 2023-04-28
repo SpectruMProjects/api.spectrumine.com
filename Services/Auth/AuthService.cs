@@ -50,7 +50,6 @@ namespace SpectruMineAPI.Services.Auth
             }
             //Секция проверки существования другого аккаунта
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
-            user = user ?? await Users.GetAsync(x => x.Email == Email.ToLower());
             if (user != null)
             {
                 if (!user.Verified)
