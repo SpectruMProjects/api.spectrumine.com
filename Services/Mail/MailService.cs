@@ -19,6 +19,11 @@ namespace SpectruMineAPI.Services.Mail
             var user = users.FirstOrDefault(x => x.MailCodes.FirstOrDefault(y => y.Code == code && !y.isRestore) != null);
             if (user != null)
             {
+                var conflictuser = await Users.GetAsync(x => x.Email == user.Email && x.Verified == true);
+                if(conflictuser != null)
+                {
+                    return Errors.UserNotFound;
+                }
                 var findcode = user.MailCodes.FirstOrDefault(y => y.Code == code && !y.isRestore);
                 //user.MailCodes.Remove(findcode!);
                 if (findcode!.ExpireAt < DateTime.UtcNow)

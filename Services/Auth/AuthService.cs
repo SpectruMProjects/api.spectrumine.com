@@ -34,18 +34,23 @@ namespace SpectruMineAPI.Services.Auth
             var regexUsername = new Regex(@"^[a-zA-Z0-9_]{3,16}$");
             var regexPassword = new Regex(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$");
             var regexMail = new Regex("^[a-zA-Z0-9.!#$%&’*+=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
+            string? uuid = null;
             //Секция проверки данных
             if (!regexUsername.IsMatch(Username) || !regexPassword.IsMatch(Password) || !regexMail.IsMatch(Email))
             {
                 return Errors.RegexNotMatch;
             }
-            var uuid = await AuthMojangAPI.GetUUIDFromMojang(Username);
-            if (uuid == null && AuthOptions.UseMojangChecks)
+            if (AuthOptions.UseMojangChecks)
             {
-                return Errors.UUIDFailed;
+                uuid = await AuthMojangAPI.GetUUIDFromMojang(Username);
+                if (uuid == null)
+                {
+                    return Errors.UUIDFailed;
+                }
             }
             //Секция проверки существования другого аккаунта
             var user = await Users.GetAsync(x => x._username == Username.ToLower());
+            user = user ?? await Users.GetAsync(x => x.Email == Email.ToLower());
             if (user != null)
             {
                 if (!user.Verified)
@@ -73,7 +78,6 @@ namespace SpectruMineAPI.Services.Auth
             }
             var code = Crypto.CalculateMD5(DateTime.UtcNow.ToString());
             //Создание аккаунта
-
             if (AuthOptions.UseMail)
             {
                 await Users.CreateAsync(new()
@@ -82,7 +86,7 @@ namespace SpectruMineAPI.Services.Auth
                     _username = Username.ToLower(),
                     Password = Crypto.CalculateSHA256(Password),
                     Email = Email,
-                    UUID = uuid == null ? Guid.NewGuid().ToString() : uuid,
+                    UUID = uuid ?? Guid.NewGuid().ToString().Replace("-",""),
                     MailCodes = new() {
                     new()
                     {
