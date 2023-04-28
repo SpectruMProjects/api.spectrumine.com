@@ -74,7 +74,7 @@ namespace SpectruMineAPI.Services.Auth
             {
                 return Errors.MailRegistered;
             }
-            if (await Users.GetAsync(user => user._username == Username.ToLower()) != null)
+            if (await Users.GetAsync(user => user._username == Username.ToLower() && user.Verified) != null)
             {
                 return Errors.Conflict;
             }
