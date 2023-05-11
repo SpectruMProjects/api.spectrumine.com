@@ -7,7 +7,7 @@
   "targets": {
     ".NETCoreApp,Version=v7.0": {},
     ".NETCoreApp,Version=v7.0/ubuntu.22.04-x64": {
-      "SpectruMineAPI/1.0.5.11054": {
+      "SpectruMineAPI/1.0.5.11138": {
         "dependencies": {
           "MailKit": "4.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.5",
@@ -1604,7 +1604,7 @@
     }
   },
   "libraries": {
-    "SpectruMineAPI/1.0.5.11054": {
+    "SpectruMineAPI/1.0.5.11138": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
