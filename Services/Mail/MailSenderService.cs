@@ -30,7 +30,7 @@ namespace SpectruMineAPI.Services.Mail
             body.HtmlBody = await CreateHtml(
                 "Подтверждение регистрации",
                 "Рады приветствовать вас на нашей платформе. Чтобы подтвердить регистрацию нажмите на кнопку",
-                "https://dev.spectrumine.com/auth/activate-register/" + code
+                "https://spectrumine.com/auth/activate-register/" + code
                 );
             emailMessage.Body = body.ToMessageBody();
 
@@ -59,7 +59,7 @@ namespace SpectruMineAPI.Services.Mail
                 Text = await CreateHtml(
                 "Смена пароля",
                 "Создан запрос для изменения пароля на проекте SpectruMine. Чтобы подтвердить смену пароля нажмите на кнопку",
-                "https://dev.spectrumine.com/auth/activate-change-pass/" + code
+                "https://spectrumine.com/auth/activate-change-pass/" + code
                 )
             };
 
