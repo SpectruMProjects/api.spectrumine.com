@@ -8,8 +8,6 @@ using SpectruMineAPI.Services.Database;
 using SpectruMineAPI.Services.Database.CRUDs;
 using SpectruMineAPI.Services.Hardcore;
 using SpectruMineAPI.Services.Mail;
-using SpectruMineAPI.Services.Payment;
-using SpectruMineAPI.Services.Products;
 
 namespace SpectruMineAPI
 {
@@ -43,15 +41,12 @@ namespace SpectruMineAPI
             builder.Services.AddSingleton<MongoService>();
             builder.Services.AddSingleton<UserCRUD>();
             builder.Services.AddSingleton<HCStatsCRUD>();
-            builder.Services.AddSingleton<ProductsCRUD>();
             //Services
             builder.Services.Configure<MailData>(builder.Configuration.GetSection("SMTPData"));
             builder.Services.AddSingleton<MailSenderService>();
             builder.Services.AddSingleton<MailService>();
             builder.Services.AddSingleton<AuthService>();
             builder.Services.AddSingleton<HardcoreService>();
-            builder.Services.AddSingleton<ProductsService>();
-            builder.Services.Configure<PaymentData>(builder.Configuration.GetSection("PaymentData"));
             var app = builder.Build();
             //CORS
             app.UseCors(p => p
