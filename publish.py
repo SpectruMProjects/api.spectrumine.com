@@ -2,7 +2,7 @@ import xml.etree.ElementTree
 import datetime
 import time
 import asyncio
-pattern = "alpha"
+pattern = "release"
 filename = "SpectruMineAPI.csproj"
 file = xml.etree.ElementTree.parse(filename)
 publishdir = "./Publish"
