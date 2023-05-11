@@ -53,7 +53,7 @@ namespace SpectruMineAPI.Services.Mail
             using var emailMessage = new MimeMessage();
             emailMessage.From.Add(new MailboxAddress("Администрация сайта", mailData.Login));
             emailMessage.To.Add(new MailboxAddress("", subject));
-            emailMessage.Subject = "helloworld";
+            emailMessage.Subject = "Изменение пароля";
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
                 Text = await CreateHtml(
@@ -80,40 +80,5 @@ namespace SpectruMineAPI.Services.Mail
                 link = link
             });
         }
-        //private string CreateHtml(string title, string text, string link)
-        //{
-        //    return $"""
-        //        <h1 style="text-align: center"> {title} на SpectruMine.com</h1>
-        //        <table width=100% border=0 cellspacing=0 cellpadding=0>
-        //            <tr>
-        //                <td align="center">
-        //                    <p style="padding: 1em"> {text} </p>
-        //                </td>
-        //            </tr>
-        //            <tr>
-        //                <td align="center">
-        //                    <button style="background-color: #73d13d;padding: 1em 2em">
-        //                        <a style="font-size: large;color: white;text-decoration: none;" href="{link}"> Подтвердить </a>
-        //                    </button>
-        //                </td>
-        //            </tr>
-        //            <tr>
-        //                <td align="center">
-        //                    <p style="padding: 1em">Если кнопка не работает, перейдите по этой ссылке:
-        //                        <a href="{link}"> {link} </a>
-        //                    </p>
-        //                </td>
-        //            </tr>
-        //            <tr>
-        //                <td align="center">
-        //                    <p style="padding: 1em">
-        //                        Если это сообщение отправлено по ошибке или вы не совершали никаких действий на платформе
-        //                        spectrumine.com - проигнорируйте это письмо
-        //                    </p>
-        //                </td>
-        //            </tr>
-        //        </table>
-        //        """;
-        //}
     }
 }
