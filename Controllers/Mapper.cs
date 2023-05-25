@@ -25,5 +25,18 @@ namespace SpectruMineAPI.Controllers
         {
             return new(stats.username, stats.lastServerTime, stats.timeOnServer, stats.stats.Map(), stats.isRespawningNow);
         }
+        public static HardcoreDTO.Top MapToTop(this UserStats stats)
+        {
+            return new(stats.username, stats.stats.Count, stats.stats.Count != 0 ? stats.stats.Last().timeToRespawn : 0, stats.timeOnServer, stats.lastServerTime);
+        }
+        public static List<HardcoreDTO.Top> MapToTop(this List<UserStats> stats)
+        {
+            List<HardcoreDTO.Top> top = new List<HardcoreDTO.Top>();
+            foreach(UserStats item in stats)
+            {
+                top.Add(item.MapToTop());
+            }
+            return top;
+        }
     }
 }
