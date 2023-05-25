@@ -15,11 +15,22 @@ namespace SpectruMineAPI.Services.Database.CRUDs
             await mongoCollection.Find(_ => true).ToListAsync();
         public async Task<User?> GetAsync(System.Linq.Expressions.Expression<Func<User, bool>> expression) =>
             await mongoCollection.Find(expression).FirstOrDefaultAsync();
+        public async Task<List<User>> GetAsync(
+            System.Linq.Expressions.Expression<Func<User, bool>> expression,
+            System.Linq.Expressions.Expression<Func<User, object>>? sorting)
+        {
+            var sortdef = Builders<User>.Sort.Ascending(sorting);
+            return await mongoCollection.Find(expression).Sort(sortdef).ToListAsync();
+        }
         public async Task CreateAsync(User entity) =>
             await mongoCollection.InsertOneAsync(entity);
         public async Task UpdateAsync(string id, User entity) =>
             await mongoCollection.ReplaceOneAsync(x => x.Id == id, entity);
         public async Task DeleteAsync(string id) =>
             await mongoCollection.DeleteOneAsync(x => x.Id == id);
+        public IMongoCollection<User> GetForAggregate()
+        {
+            return mongoCollection;
+        }
     }
 }
