@@ -40,9 +40,9 @@ namespace SpectruMineAPI.Controllers
             return stats.Map();
         }
         [HttpGet("top")]
-        public async Task<ActionResult> GetTopStats()
+        public async Task<ActionResult> GetTopStats(int offset = 0)
         {
-            var result = await hardcoreService.GetTop10();
+            var result = await hardcoreService.GetTop10(offset);
             return Ok(result.MapToTop());
         }
     }

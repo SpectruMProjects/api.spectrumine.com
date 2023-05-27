@@ -10,7 +10,7 @@ namespace SpectruMineAPI.Controllers
         [HttpGet("/")]
         public ActionResult Index()
         {
-            return Ok($"Version: {System.Reflection.Assembly.GetEntryAssembly().GetName().Version}");
+            return Ok($"Version: {System.Reflection.Assembly.GetEntryAssembly()!.GetName().Version}");
         }
     }
 }

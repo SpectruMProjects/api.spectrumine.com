@@ -29,7 +29,7 @@ namespace SpectruMineAPI.Controllers
         {
             return new(stats.username, stats.stats.Count, stats.stats.Count != 0 ? stats.stats.Last().timeToRespawn : 0, stats.timeOnServer, stats.lastServerTime);
         }
-        public static List<HardcoreDTO.Top> MapToTop(this List<UserStats> stats)
+        public static List<HardcoreDTO.Top> MapToTop(this List<UserStats> stats, int offset = 0)
         {
             List<HardcoreDTO.Top> top = new List<HardcoreDTO.Top>();
             foreach(UserStats item in stats)

@@ -29,11 +29,15 @@ namespace SpectruMineAPI.Services.Hardcore
             this.Stats = Stats;
             this.Cache = Cache;
         }
-        public async Task<List<UserStats>> GetTop10()
+        public async Task<List<UserStats>> GetTop10(int offset = 0)
         {
             var res = await Stats.GetAsync();
-            res.Sort(new TopComparer());
-            return res;
+            if (offset > res.Count)
+            {
+                return new List<UserStats>();
+            }
+                res.Sort(new TopComparer());
+            return res.GetRange(offset, res.Count - offset > 10 ? 10 : res.Count - offset);
         }
         public async Task<Errors> CheckAccess(string username)
         {
